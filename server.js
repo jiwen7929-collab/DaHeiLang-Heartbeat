@@ -211,7 +211,7 @@ function loadTimeline() {
 function saveTimeline(messages) {
   const sp = messages.find(m => m.role === "system");
   const nonSP = messages.filter(m => m.role !== "system");
-  const trimmed = nonSP.slice(-49);
+  const trimmed = nonSP.slice(-10);
   const final = sp ? [sp, ...trimmed] : trimmed;
   fs.writeJsonSync(TIMELINE_FILE, final, { spaces: 2 });
 }
