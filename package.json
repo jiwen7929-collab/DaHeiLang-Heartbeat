@@ -1,5 +1,5 @@
 {
-  "name": "kelivo-gateway",
+  "name": "daheilang-heartbeat",
   "version": "1.0.0",
   "description": "A local Kelivo gateway that keeps timed chat context and lets your character send optional Bark wake-up messages.",
   "main": "server.js",
@@ -9,7 +9,7 @@
     "test": "node --test"
   },
   "keywords": ["fastify", "gateway", "api-gateway", "node-cron", "kelivo"],
-  "author": "callie0313",
+  "author": "qiqi",
   "license": "SEE LICENSE IN LICENSE",
   "type": "commonjs",
   "engines": {
