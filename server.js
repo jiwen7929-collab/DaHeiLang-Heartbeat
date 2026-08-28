@@ -10,6 +10,25 @@ const {
 } = require("./time_utils");
 
 const DEFAULT_BODY_LIMIT_MB = 50;
+function mergeConsecutiveSameRoleMessages(messages) {
+  const merged = [];
+  for (const msg of messages) {
+    const prev = merged[merged.length - 1];
+    if (
+      prev &&
+      prev.role === msg.role &&
+      (msg.role === "user" || msg.role === "assistant") &&
+      typeof prev.content === "string" &&
+      typeof msg.content === "string" &&
+      !prev.tool_calls && !msg.tool_calls
+    ) {
+      prev.content = `${prev.content}\n\n${msg.content}`;
+    } else {
+      merged.push({ ...msg });
+    }
+  }
+  return merged;
+}
 
 function readBodyLimitBytes() {
   const configured = Number(process.env.REQUEST_BODY_LIMIT_MB);
@@ -699,7 +718,7 @@ app.post("/v1/chat/completions", async (req, reply) => {
         "Content-Type": "application/json",
         Authorization: `Bearer ${process.env.TARGET_API_KEY}`
       },
-      body: JSON.stringify({ ...body, messages: llmMessages })
+      body: JSON.stringify({ ...body, messages: mergeConsecutiveSameRoleMessages(llmMessages) })
     });
 
     const upstreamContentType = response.headers.get("content-type") || "";
